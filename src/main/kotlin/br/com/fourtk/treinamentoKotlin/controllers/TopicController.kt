@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topics")
@@ -28,7 +29,7 @@ class TopicController (
         return topicService.getById(id)
     }
     @PostMapping
-    fun insertTopic(@RequestBody topicRequestDTO: TopicRequestDTO) {
+    fun insertTopic(@RequestBody @Valid topicRequestDTO: TopicRequestDTO) {
         topicService.insertTopic(topicRequestDTO)
     }
 }
