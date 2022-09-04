@@ -1,9 +1,12 @@
 package br.com.fourtk.treinamentoKotlin.controllers
 
+import br.com.fourtk.treinamentoKotlin.dtos.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.model.Topic
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -22,5 +25,9 @@ class TopicController (
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long): Topic {
         return topicService.getById(id)
+    }
+    @PostMapping
+    fun insertTopic(@RequestBody topicRequestDTO: TopicRequestDTO) {
+        topicService.insertTopic(topicRequestDTO)
     }
 }
