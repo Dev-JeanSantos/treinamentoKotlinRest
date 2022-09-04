@@ -6,7 +6,7 @@ data class Answer (
     val id: Long? = null,
     val message: String,
     val dateCreate: LocalDateTime = LocalDateTime.now(),
-    val user: User,
+    val author: User,
     val topic: Topic,
     val solution: Boolean
     )
