@@ -1,4 +1,4 @@
-package br.com.fourtk.treinamentoKotlin.dtos
+package br.com.fourtk.treinamentoKotlin.requestDTO
 
 class TopicRequestDTO (
     val title: String,

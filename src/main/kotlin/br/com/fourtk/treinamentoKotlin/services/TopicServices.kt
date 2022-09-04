@@ -1,8 +1,11 @@
 package br.com.fourtk.treinamentoKotlin.services
 
-import br.com.fourtk.treinamentoKotlin.dtos.TopicRequestDTO
+import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.model.Topic
+import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import org.springframework.stereotype.Service
+import java.util.Collections
+import java.util.stream.Collectors
 
 @Service
 class TopicServices (
@@ -11,14 +14,28 @@ class TopicServices (
     private val authorService: AuthorService
 )
 {
-    fun listar(): List<Topic> {
-        return topics
+    fun listar(): List<TopicResponseDTO> {
+        return topics.stream().map { t -> TopicResponseDTO(
+            id = t.id,
+            title = t.title,
+            message = t.message,
+            dateCreate = t.dateCreate,
+            status = t.status
+        ) }.collect(Collectors.toList())
     }
 
-    fun getById(id: Long): Topic {
-        return topics.stream().filter({
+    fun getById(id: Long): TopicResponseDTO {
+        val possibleTopic =  topics.stream().filter{
             t -> t.id == id
-        }).findFirst().get()
+        }.findFirst().get()
+
+        return TopicResponseDTO(
+            id = possibleTopic.id,
+            title = possibleTopic.title,
+            message = possibleTopic.message,
+            dateCreate = possibleTopic.dateCreate,
+            status = possibleTopic.status
+        )
     }
 
     fun insertTopic(topicRequestDTO: TopicRequestDTO) {

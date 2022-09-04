@@ -1,0 +1,12 @@
+package br.com.fourtk.treinamentoKotlin.responseDTO
+
+import br.com.fourtk.treinamentoKotlin.model.StatusTopic
+import java.time.LocalDateTime
+
+data class TopicResponseDTO (
+    val id: Long?,
+    val title: String,
+    val message: String,
+    val status: StatusTopic,
+    val dateCreate: LocalDateTime
+    )
