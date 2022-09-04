@@ -3,7 +3,7 @@ package br.com.fourtk.treinamentoKotlin.model
 import java.time.LocalDateTime
 
 data class Topic (
-    val id: Long? = null,
+    var id: Long? = null,
     val title: String,
     val message: String,
     val dateCreate: LocalDateTime = LocalDateTime.now(),
