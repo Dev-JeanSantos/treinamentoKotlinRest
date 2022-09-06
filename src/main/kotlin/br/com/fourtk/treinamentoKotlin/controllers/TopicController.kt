@@ -5,6 +5,7 @@ import br.com.fourtk.treinamentoKotlin.model.Topic
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -37,5 +38,9 @@ class TopicController (
     @PutMapping
     fun updateTopic(@RequestBody @Valid updateTopicRequestDTO: UpdateTopicRequestDTO) {
         topicService.update(updateTopicRequestDTO)
+    }
+    @DeleteMapping("/{id}")
+    fun deleteTopic(@PathVariable id: Long) {
+        topicService.delete(id)
     }
 }
