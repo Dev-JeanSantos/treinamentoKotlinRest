@@ -1,5 +1,6 @@
 package br.com.fourtk.treinamentoKotlin.services
 
+import br.com.fourtk.treinamentoKotlin.exception.NotFoundException
 import br.com.fourtk.treinamentoKotlin.mapper.TopicRequestMapper
 import br.com.fourtk.treinamentoKotlin.mapper.TopicResponseMapper
 import br.com.fourtk.treinamentoKotlin.model.Topic
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
 @Service
-class TopicServices (
+class TopicServices(
     private var topics: List<Topic> = ArrayList(),
     private val topicoResponseMapper: TopicResponseMapper,
-    private val topicoRequestMapper: TopicRequestMapper
+    private val topicoRequestMapper: TopicRequestMapper,
+    val notFoundException: String = "Topico não encontrado!"
 )
 {
     fun listar(): List<TopicResponseDTO> {
@@ -25,7 +27,7 @@ class TopicServices (
     fun getById(id: Long): TopicResponseDTO {
         val possibleTopic =  topics.stream().filter{
             t -> t.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{NotFoundException(notFoundException)}
         return topicoResponseMapper.map(possibleTopic)
     }
 
@@ -37,7 +39,8 @@ class TopicServices (
     }
 
     fun update(updateTopicRequestDTO: UpdateTopicRequestDTO): TopicResponseDTO {
-        val topic = topics.stream().filter {t -> t.id == updateTopicRequestDTO.id}.findFirst().get()
+        val topic = topics.stream().filter {t -> t.id == updateTopicRequestDTO.id}.findFirst().
+            orElseThrow{NotFoundException(notFoundException)}
         //(Update) Delete old topic and create new topic
         val newTopicUpdated = Topic(
             id = updateTopicRequestDTO.id,
@@ -52,7 +55,8 @@ class TopicServices (
         return topicoResponseMapper.map(newTopicUpdated)
     }
     fun delete(id: Long) {
-        val topic = topics.stream().filter{t -> t.id == id}.findFirst().get()
+        val topic = topics.stream().filter{t -> t.id == id}.findFirst().
+            orElseThrow{NotFoundException(notFoundException)}
         topics = topics.minus(topic)
     }
 }
