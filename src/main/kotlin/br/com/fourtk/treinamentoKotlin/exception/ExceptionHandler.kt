@@ -2,6 +2,7 @@ package br.com.fourtk.treinamentoKotlin.exception
 
 import br.com.fourtk.treinamentoKotlin.exceptionDTO.ErrorView
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -33,6 +34,23 @@ class ExceptionHandler {
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
             error = HttpStatus.INTERNAL_SERVER_ERROR.name,
             message = exception.message,
+            path = request.servletPath
+        )
+    }
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handlerValidationError(
+        exception: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ErrorView {
+        val errorMessage = HashMap<String, String?>()
+        exception.bindingResult.fieldErrors.forEach{
+            err -> errorMessage.put(err.field, err.defaultMessage)
+        }
+        return ErrorView(
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            error = HttpStatus.INTERNAL_SERVER_ERROR.name,
+            message = errorMessage.toString(),
             path = request.servletPath
         )
     }

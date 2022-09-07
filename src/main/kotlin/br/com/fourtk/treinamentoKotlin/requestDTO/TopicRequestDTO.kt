@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 class TopicRequestDTO (
-    @field:NotEmpty
+    @field:NotEmpty(message = "Essa porra não deve ser vazia, filha da puta!")
     @field:Size(min = 5, max = 50)
     val title: String,
     @field:NotEmpty
