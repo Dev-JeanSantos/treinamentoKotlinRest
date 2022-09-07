@@ -29,27 +29,27 @@ class TopicServices (
         return topicoResponseMapper.map(possibleTopic)
     }
 
-    fun insertTopic(topicRequestDTO: TopicRequestDTO) {
+    fun insertTopic(topicRequestDTO: TopicRequestDTO): TopicResponseDTO{
         val topic = topicoRequestMapper.map(topicRequestDTO)
         topic.id = topics.size.toLong() + 1
         topics = topics.plus(topic)
+        return topicoResponseMapper.map(topic)
     }
 
-    fun update(updateTopicRequestDTO: UpdateTopicRequestDTO) {
+    fun update(updateTopicRequestDTO: UpdateTopicRequestDTO): TopicResponseDTO {
         val topic = topics.stream().filter {t -> t.id == updateTopicRequestDTO.id}.findFirst().get()
         //(Update) Delete old topic and create new topic
-        topics = topics.minus((topic)).plus(
-            Topic(
-                id = updateTopicRequestDTO.id,
-                title = updateTopicRequestDTO.title,
-                message = updateTopicRequestDTO.message,
-                author = topic.author,
-                course = topic.course,
-                answer = topic.answer,
-                status = topic.status,
-                dateCreate = topic.dateCreate
-            )
-        )
+        val newTopicUpdated = Topic(
+            id = updateTopicRequestDTO.id,
+            title = updateTopicRequestDTO.title,
+            message = updateTopicRequestDTO.message,
+            author = topic.author,
+            course = topic.course,
+            answer = topic.answer,
+            status = topic.status,
+            dateCreate = topic.dateCreate)
+        topics = topics.minus((topic)).plus(newTopicUpdated)
+        return topicoResponseMapper.map(newTopicUpdated)
     }
     fun delete(id: Long) {
         val topic = topics.stream().filter{t -> t.id == id}.findFirst().get()
