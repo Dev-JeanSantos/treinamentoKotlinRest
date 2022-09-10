@@ -1,0 +1,11 @@
+CREATE TABLE tb_answer(
+    id bigint not null auto_increment,
+    message varchar(300) not null,
+    date_create datetime not null,
+    topic_id bigint not null,
+    author_id bigint not null,
+    solution boolean not null,
+    primary key(id),
+    foreign key (topic_id) references tb_topic(id),
+    foreign key (author_id) references tb_user(id)
+);
