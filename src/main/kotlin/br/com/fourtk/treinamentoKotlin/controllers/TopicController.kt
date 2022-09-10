@@ -1,7 +1,6 @@
 package br.com.fourtk.treinamentoKotlin.controllers
 
 import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
-import br.com.fourtk.treinamentoKotlin.model.Topic
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.util.UriBuilder
 import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
 
@@ -28,9 +27,8 @@ class TopicController (
         ){
 
     @GetMapping
-    fun list(): List<TopicResponseDTO> {
-
-        return topicService.listar()
+    fun list(@RequestParam(required = false) nameCourse: String?): List<TopicResponseDTO> {
+        return topicService.listar(nameCourse)
     }
 
     @GetMapping("/{id}")

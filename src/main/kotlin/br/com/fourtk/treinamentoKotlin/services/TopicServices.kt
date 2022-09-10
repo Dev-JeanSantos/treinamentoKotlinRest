@@ -3,7 +3,6 @@ package br.com.fourtk.treinamentoKotlin.services
 import br.com.fourtk.treinamentoKotlin.exception.NotFoundException
 import br.com.fourtk.treinamentoKotlin.mapper.TopicRequestMapper
 import br.com.fourtk.treinamentoKotlin.mapper.TopicResponseMapper
-import br.com.fourtk.treinamentoKotlin.model.Topic
 import br.com.fourtk.treinamentoKotlin.repository.TopicRepository
 import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
@@ -19,8 +18,13 @@ class TopicServices(
     val notFoundException: String = "Topico não encontrado!"
 )
 {
-    fun listar(): List<TopicResponseDTO> {
-        return topicRepository.findAll().stream().map {
+    fun listar(nameCourse: String?): List<TopicResponseDTO> {
+        val topics = if(nameCourse == null){
+            topicRepository.findAll()
+        } else{
+            topicRepository.findByCourseName(nameCourse)
+        }
+        return topics.stream().map {
                 t -> topicoResponseMapper.map(t)
         }.collect(Collectors.toList())
     }
