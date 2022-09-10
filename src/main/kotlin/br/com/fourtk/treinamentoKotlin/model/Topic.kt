@@ -7,8 +7,8 @@ import javax.persistence.*
 data class Topic (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    val title: String,
-    val message: String,
+    var title: String,
+    var message: String,
     val dateCreate: LocalDateTime = LocalDateTime.now(),
     @ManyToOne
     val course: Course,
