@@ -6,6 +6,7 @@ import br.com.fourtk.treinamentoKotlin.mapper.TopicResponseMapper
 import br.com.fourtk.treinamentoKotlin.repository.TopicRepository
 import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
+import br.com.fourtk.treinamentoKotlin.responseDTO.TopicByCategoryDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -57,5 +58,9 @@ class TopicServices(
     }
     fun delete(id: Long) {
         val topic = topicRepository.deleteById(id)
+    }
+
+    fun reports():List<TopicByCategoryDTO> {
+      return topicRepository.reports()
     }
 }

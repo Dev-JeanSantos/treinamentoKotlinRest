@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "tb_answer")
 data class Answer (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,

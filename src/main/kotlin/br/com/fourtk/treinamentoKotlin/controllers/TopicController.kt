@@ -2,6 +2,7 @@ package br.com.fourtk.treinamentoKotlin.controllers
 
 import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
+import br.com.fourtk.treinamentoKotlin.responseDTO.TopicByCategoryDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
 import org.springframework.cache.annotation.CacheEvict
@@ -70,5 +71,10 @@ class TopicController (
     @CacheEvict(value = ["Topicos"], allEntries = true)
     fun deleteTopic(@PathVariable id: Long) {
         topicService.delete(id)
+    }
+
+    @GetMapping("/reports")
+    fun reports_topic():List<TopicByCategoryDTO>{
+        return topicService.reports()
     }
 }
