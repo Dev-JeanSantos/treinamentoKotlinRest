@@ -7,6 +7,8 @@ import br.com.fourtk.treinamentoKotlin.repository.TopicRepository
 import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
@@ -18,15 +20,18 @@ class TopicServices(
     val notFoundException: String = "Topico não encontrado!"
 )
 {
-    fun listar(nameCourse: String?): List<TopicResponseDTO> {
+    fun listar(
+        nameCourse: String?,
+        pagination: Pageable
+    ): Page<TopicResponseDTO> {
         val topics = if(nameCourse == null){
-            topicRepository.findAll()
+            topicRepository.findAll(pagination)
         } else{
-            topicRepository.findByCourseName(nameCourse)
+            topicRepository.findByCourseName(nameCourse, pagination)
         }
-        return topics.stream().map {
+        return topics.map {
                 t -> topicoResponseMapper.map(t)
-        }.collect(Collectors.toList())
+        }
     }
 
     fun getById(id: Long): TopicResponseDTO {

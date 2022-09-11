@@ -4,6 +4,10 @@ import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
@@ -27,8 +31,11 @@ class TopicController (
         ){
 
     @GetMapping
-    fun list(@RequestParam(required = false) nameCourse: String?): List<TopicResponseDTO> {
-        return topicService.listar(nameCourse)
+    fun list(
+        @RequestParam(required = false) nameCourse: String?,
+        @PageableDefault(size = 2, sort = ["dateCreate"], direction = Sort.Direction.DESC) pagination: Pageable
+    ): Page<TopicResponseDTO> {
+        return topicService.listar(nameCourse, pagination)
     }
 
     @GetMapping("/{id}")
