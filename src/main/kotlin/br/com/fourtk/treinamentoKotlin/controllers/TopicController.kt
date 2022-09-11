@@ -4,6 +4,8 @@ import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -31,9 +33,10 @@ class TopicController (
         ){
 
     @GetMapping
+    @Cacheable("Topicos")
     fun list(
         @RequestParam(required = false) nameCourse: String?,
-        @PageableDefault(size = 2, sort = ["dateCreate"], direction = Sort.Direction.DESC) pagination: Pageable
+        @PageableDefault(size = 5, sort = ["dateCreate"], direction = Sort.Direction.DESC) pagination: Pageable
     ): Page<TopicResponseDTO> {
         return topicService.listar(nameCourse, pagination)
     }
@@ -44,6 +47,7 @@ class TopicController (
     }
     @PostMapping
     @Transactional
+    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun insertTopic(
         @RequestBody @Valid topicRequestDTO: TopicRequestDTO,
         uriBuilder: UriComponentsBuilder
@@ -54,6 +58,7 @@ class TopicController (
     }
     @PutMapping
     @Transactional
+    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun updateTopic(@RequestBody @Valid updateTopicRequestDTO: UpdateTopicRequestDTO)
     : ResponseEntity<TopicResponseDTO>  {
         val topicResponseDTO = topicService.update(updateTopicRequestDTO)
@@ -62,6 +67,7 @@ class TopicController (
     @DeleteMapping("/{id}")
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun deleteTopic(@PathVariable id: Long) {
         topicService.delete(id)
     }
