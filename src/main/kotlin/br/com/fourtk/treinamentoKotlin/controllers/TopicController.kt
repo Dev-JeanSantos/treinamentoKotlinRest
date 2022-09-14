@@ -5,6 +5,7 @@ import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicByCategoryDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
+import org.hibernate.boot.model.relational.Loggable
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
+import java.util.logging.Logger
 import javax.validation.Valid
 
 @RestController
@@ -32,13 +34,13 @@ import javax.validation.Valid
 class TopicController (
     private val topicService: TopicServices
         ){
-
     @GetMapping
     @Cacheable("Topicos")
     fun list(
         @RequestParam(required = false) nameCourse: String?,
         @PageableDefault(size = 5, sort = ["dateCreate"], direction = Sort.Direction.DESC) pagination: Pageable
     ): Page<TopicResponseDTO> {
+        //logger.info("passei aqui1")
         return topicService.listar(nameCourse, pagination)
     }
 
