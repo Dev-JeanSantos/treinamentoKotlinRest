@@ -5,4 +5,4 @@ CREATE TABLE user(
     primary key(id)
 );
 
-INSERT INTO  USER (id, name, email ) VALUES (1, 'Jean', 'email@gmail.com');
+INSERT INTO  user (id, name, email ) VALUES (1, 'Jean', 'email@gmail.com');

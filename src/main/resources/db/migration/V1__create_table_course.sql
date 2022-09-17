@@ -5,6 +5,6 @@ CREATE TABLE course(
     primary key(id)
 );
 
-INSERT INTO COURSE (id, name, category ) VALUES (1, 'Kotlin', 'PROGRAMAÇÃO');
-INSERT INTO COURSE (id, name, category ) VALUES (2, 'AWS', 'DEVOPS');
-INSERT INTO COURSE (id, name, category ) VALUES (3, 'ADOBE XD', 'UX');
+INSERT INTO course (id, name, category ) VALUES (1, 'Kotlin', 'PROGRAMAÇÃO');
+INSERT INTO course (id, name, category ) VALUES (2, 'AWS', 'DEVOPS');
+INSERT INTO course (id, name, category ) VALUES (3, 'ADOBE XD', 'UX');
