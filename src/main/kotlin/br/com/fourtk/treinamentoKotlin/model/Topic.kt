@@ -1,5 +1,6 @@
 package br.com.fourtk.treinamentoKotlin.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -10,6 +11,7 @@ data class Topic (
     var title: String,
     var message: String,
     val dateCreate: LocalDateTime = LocalDateTime.now(),
+    var dateAlter: LocalDate? =  null,
     @ManyToOne
     val course: Course,
     @ManyToOne

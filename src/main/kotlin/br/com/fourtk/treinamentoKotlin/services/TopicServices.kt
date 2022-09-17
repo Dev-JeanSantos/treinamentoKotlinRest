@@ -11,6 +11,7 @@ import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.util.stream.Collectors
 
 @Service
@@ -53,6 +54,7 @@ class TopicServices(
         //(Update) Delete old topic and create new topic
             topic.title = updateTopicRequestDTO.title
             topic.message = updateTopicRequestDTO.message
+            topic.dateAlter = LocalDate.now()
 
         return topicoResponseMapper.map(topic)
     }

@@ -1,0 +1,25 @@
+#application.yaml
+spring:
+
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:forumAlura
+    username: sa
+    password:
+#  datasource:
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/forumalura?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: devjs
+
+  jpa:
+#    database-plataform: org.hibernate.dialect.MySQL8Dialect?
+    database-plataform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+jwt:
+  secret: secret
