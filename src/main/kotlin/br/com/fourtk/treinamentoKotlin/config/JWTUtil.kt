@@ -1,6 +1,5 @@
 package br.com.fourtk.treinamentoKotlin.config
 
-import br.com.fourtk.treinamentoKotlin.exception.NotFoundException
 import br.com.fourtk.treinamentoKotlin.services.AuthorService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -13,31 +12,33 @@ import java.util.*
 
 @Component
 class JWTUtil(
-    private val  usuarioService: AuthorService
-){
-    val expiration: Long = 3600000
-    @Value("\${jwt.secret}")
-    lateinit var secret: String
+    private val usuarioService: AuthorService
+) {
 
-    fun generateToken(username: String, authorities: MutableCollection<out GrantedAuthority>): String?{
-        return Jwts.builder().setSubject(username).
-            claim("role",authorities).
-        setExpiration(Date(System.currentTimeMillis() + expiration)).
-        signWith(
-                SignatureAlgorithm.HS512,
-                secret.toByteArray()).compact()
+    private val expiration : Long = 6000000
+
+    @Value("\${jwt.secret}")
+    private lateinit var secret : String
+
+    fun generateToken(username: String, authorities: MutableCollection<out GrantedAuthority>): String? {
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("role", authorities)
+                .setExpiration(Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS512, secret.toByteArray())
+                .compact()
     }
 
-    fun isValid(jwt: String): Boolean {
+    fun isValid(jwt: String?): Boolean {
         return try {
             Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt)
             true
-        }catch (e: NotFoundException){
+        } catch (e: IllegalArgumentException) {
             false
         }
     }
 
-    fun getAuthentication(jwt: String?): Authentication {
+    fun getAuthentication(jwt: String?) : Authentication {
         val username = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt).body.subject
         val user = usuarioService.loadUserByUsername(username)
         return UsernamePasswordAuthenticationToken(username, null, user.authorities)
