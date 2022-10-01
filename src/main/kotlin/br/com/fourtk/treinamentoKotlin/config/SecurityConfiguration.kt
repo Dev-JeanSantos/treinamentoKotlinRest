@@ -13,52 +13,37 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import java.util.*
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
     private val userDetailsService: UserDetailsService,
     private val jwtUtil: JWTUtil
-): WebSecurityConfigurerAdapter() {
+)
+    : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity?) {
-        http?.csrf()?.disable()?.
+        http?.
+        csrf()?.disable()?.
         authorizeRequests()?.
-        antMatchers("/topics/**")?.hasAuthority("READ_WRITE")?.
+        antMatchers("/topicos")?.hasAuthority("READ_WRITE")?.
         antMatchers(HttpMethod.POST,"/login")?.permitAll()?.
-        antMatchers("/h2-console/**")?.permitAll()?.
+        antMatchers(HttpMethod.GET, "/swagger-ui/*")?.permitAll()?.
+        antMatchers(HttpMethod.GET,"/v3/api-docs/**")?.permitAll()?.
         anyRequest()?.
         authenticated()?.
         and()
         http?.addFilterBefore(JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
-        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter().javaClass )
+        http?.addFilterBefore(JWTAuthenticationFilter(jwtUtil = jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)
         http?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        http?.cors()?.configurationSource(corsConfigurationSource())
-    }
-
-    override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth?.userDetailsService(userDetailsService)?.passwordEncoder(bCryptyPasswordEncoder())
     }
 
     @Bean
-    fun bCryptyPasswordEncoder(): BCryptPasswordEncoder{
+    fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
         return BCryptPasswordEncoder()
     }
 
-    private fun corsConfigurationSource(): CorsConfigurationSource? {
-        val corsConfig = CorsConfiguration()
-        corsConfig.setAllowedOrigins(Arrays.asList("*"));
-        corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH"));
-        corsConfig.setAllowCredentials(true);
-        corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", corsConfig);
-        return source;
+    override fun configure(auth: AuthenticationManagerBuilder?) {
+        auth?.userDetailsService(userDetailsService)?.passwordEncoder(bCryptPasswordEncoder())
     }
-
 }

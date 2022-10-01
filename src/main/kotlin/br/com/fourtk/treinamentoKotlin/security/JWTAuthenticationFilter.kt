@@ -23,10 +23,10 @@ class JWTAuthenticationFilter(private val jwtUtil: JWTUtil) : OncePerRequestFilt
         filterChain.doFilter(request, response)
     }
 
-    private fun getTokenDetail(token: String): String {
-        return  token.let{jwt ->
-            jwt?.startsWith("Bearer")
-            jwt?.substring(7,jwt.length)
+    private fun getTokenDetail(token: String?): String? {
+        return  token?.let{jwt ->
+            jwt.startsWith("Bearer")
+            jwt.substring(7,jwt.length)
         }
     }
 }
