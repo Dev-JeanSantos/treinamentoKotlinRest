@@ -27,22 +27,21 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
+import java.io.Serializable
 import java.util.logging.Logger
 import javax.validation.Valid
 
 @SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/topics")
-class TopicController (
+class TopicController  (
     private val topicService: TopicServices
         ){
     @GetMapping
-    @Cacheable("Topicos")
     fun list(
         @RequestParam(required = false) nameCourse: String?,
         @PageableDefault(size = 5, sort = ["dateCreate"], direction = Sort.Direction.DESC) pagination: Pageable
     ): Page<TopicResponseDTO> {
-        //logger.info("passei aqui1")
         return topicService.listar(nameCourse, pagination)
     }
 
@@ -52,7 +51,6 @@ class TopicController (
     }
     @PostMapping
     @Transactional
-    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun insertTopic(
         @RequestBody @Valid topicRequestDTO: TopicRequestDTO,
         uriBuilder: UriComponentsBuilder
@@ -63,7 +61,6 @@ class TopicController (
     }
     @PutMapping
     @Transactional
-    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun updateTopic(@RequestBody @Valid updateTopicRequestDTO: UpdateTopicRequestDTO)
     : ResponseEntity<TopicResponseDTO>  {
         val topicResponseDTO = topicService.update(updateTopicRequestDTO)
@@ -72,7 +69,6 @@ class TopicController (
     @DeleteMapping("/{id}")
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun deleteTopic(@PathVariable id: Long) {
         topicService.delete(id)
     }

@@ -8,20 +8,22 @@ import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicByCategoryDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.util.stream.Collectors
 
 @Service
 class TopicServices(
     private val topicRepository: TopicRepository,
     private val topicoResponseMapper: TopicResponseMapper,
     private val topicoRequestMapper: TopicRequestMapper,
-    val notFoundException: String = "Topico não encontrado!"
+    val notFoundException: String = "Topic not found!"
 )
 {
+    @Cacheable(cacheNames = ["Topicos"], key = "#root.method.name")
     fun listar(
         nameCourse: String?,
         pagination: Pageable
@@ -42,12 +44,14 @@ class TopicServices(
         return topicoResponseMapper.map(possibleTopic)
     }
 
+    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun insertTopic(topicRequestDTO: TopicRequestDTO): TopicResponseDTO{
         val topic = topicoRequestMapper.map(topicRequestDTO)
         topicRepository.save(topic)
         return topicoResponseMapper.map(topic)
     }
 
+    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun update(updateTopicRequestDTO: UpdateTopicRequestDTO): TopicResponseDTO {
         val topic = topicRepository.findById(updateTopicRequestDTO.id).
             orElseThrow{NotFoundException(notFoundException)}
@@ -62,6 +66,7 @@ class TopicServices(
         val topic = topicRepository.deleteById(id)
     }
 
+    @CacheEvict(value = ["Topicos"], allEntries = true)
     fun reports():List<TopicByCategoryDTO> {
       return topicRepository.reports()
     }
