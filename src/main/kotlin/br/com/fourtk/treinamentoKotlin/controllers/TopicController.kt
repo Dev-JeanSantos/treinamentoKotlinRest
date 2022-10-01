@@ -5,6 +5,7 @@ import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicByCategoryDTO
 import br.com.fourtk.treinamentoKotlin.responseDTO.TopicResponseDTO
 import br.com.fourtk.treinamentoKotlin.services.TopicServices
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.hibernate.boot.model.relational.Loggable
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -29,6 +30,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import java.util.logging.Logger
 import javax.validation.Valid
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/topics")
 class TopicController (
