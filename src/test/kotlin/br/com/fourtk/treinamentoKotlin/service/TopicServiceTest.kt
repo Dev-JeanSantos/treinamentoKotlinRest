@@ -66,7 +66,7 @@ class TopicServiceTest {
             topicServices.getById(1)
         }
 
-        Assertions.assertThat(atual.message).isEqualTo("Topico não encontrado!")
+        Assertions.assertThat(atual.message).isEqualTo("Topic not found!")
 
     }
 

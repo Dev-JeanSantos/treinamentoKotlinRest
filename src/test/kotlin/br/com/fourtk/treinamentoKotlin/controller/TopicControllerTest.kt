@@ -39,6 +39,10 @@ class TopicControllerTest {
     }
 
     @Test
+    fun `Should return 400 when triggering a tokenless request`(){
+        mockMvc.get(RECURSO).andExpect { status { is4xxClientError() } }
+    }
+    @Test
     fun `Must return 200 when calling topics with token`(){
         mockMvc.get(RECURSO){
             headers { token?.let { this.setBearerAuth(it) }}
