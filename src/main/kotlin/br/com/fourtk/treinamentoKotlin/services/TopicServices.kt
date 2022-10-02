@@ -3,6 +3,7 @@ package br.com.fourtk.treinamentoKotlin.services
 import br.com.fourtk.treinamentoKotlin.exception.NotFoundException
 import br.com.fourtk.treinamentoKotlin.mapper.TopicRequestMapper
 import br.com.fourtk.treinamentoKotlin.mapper.TopicResponseMapper
+import br.com.fourtk.treinamentoKotlin.model.Topic
 import br.com.fourtk.treinamentoKotlin.repository.TopicRepository
 import br.com.fourtk.treinamentoKotlin.requestDTO.TopicRequestDTO
 import br.com.fourtk.treinamentoKotlin.requestDTO.UpdateTopicRequestDTO
@@ -42,6 +43,11 @@ class TopicServices(
         val possibleTopic =  topicRepository.findById(id).
             orElseThrow{NotFoundException(notFoundException)}
         return topicoResponseMapper.map(possibleTopic)
+    }
+    fun getByIdAnswer(id: Long): Topic {
+        val possibleTopic =  topicRepository.findById(id).
+            orElseThrow{NotFoundException(notFoundException)}
+        return (possibleTopic)
     }
 
     @CacheEvict(value = ["Topicos"], allEntries = true)
