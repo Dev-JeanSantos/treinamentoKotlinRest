@@ -1,25 +1,39 @@
-#application.yaml
+application.yaml#spring:
 spring:
-
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:forumAlura
-    username: sa
-    password:
-#  datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/forumalura?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
-#    username: root
-#    password: devjs
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://au77784bkjx6ipju.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/yw6neus3xh5a59uk?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 
   jpa:
-#    database-plataform: org.hibernate.dialect.MySQL8Dialect?
-    database-plataform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: false
+    database-plataform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         show_sql: true
         format_sql: true
 
+  cache:
+    type: redis
+
+  redis:
+    host: redis-13404.c114.us-east-1-4.ec2.cloud.redislabs.com
+    port: 13404
+    password: ${REDIS_PASSWORD}
+
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: cd3f20d161832f
+    password: 2ef198a7fc527d
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jwt:
-  secret: secret
+  secret: secreto
