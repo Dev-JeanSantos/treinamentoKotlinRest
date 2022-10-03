@@ -1,5 +1,6 @@
 package br.com.fourtk.treinamentoKotlin.integration
 
+import br.com.fourtk.treinamentoKotlin.configuration.DatabaseContainerConfiguration
 import br.com.fourtk.treinamentoKotlin.model.Topic
 import br.com.fourtk.treinamentoKotlin.model.TopicTest
 import br.com.fourtk.treinamentoKotlin.repository.TopicRepository
@@ -16,35 +17,15 @@ import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
-@DataJpaTest
 @Testcontainers
-//Não quero fazer o replace por esse banco de Teste
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class TopicRepositoryTest {
+class TopicRepositoryTest : DatabaseContainerConfiguration() {
 
     @Autowired
     private lateinit var topicRepository: TopicRepository
-
+    private val pagination = PageRequest.of(0,5)
     private val topic = TopicTest.build()
 
-    //Classe estatica (static do Java)
-    companion object{
-        @Container
-        private val mysqlContainer = MySQLContainer<Nothing>("mysql:8.0.28").apply {
-            withDatabaseName("testedb")
-            withUsername("jean")
-            withPassword("123456")
-        }
-
-        @JvmStatic
-        @DynamicPropertySource
-        fun properties(registry: DynamicPropertyRegistry){
-            registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl)
-            registry.add("spring.datasource.password", mysqlContainer::getPassword)
-            registry.add("spring.datasource.name", mysqlContainer::getUsername)
-        }
-
-    }
 
     @Test
     fun `must generate a report`(){
@@ -60,10 +41,7 @@ class TopicRepositoryTest {
     fun `must list a topic by course name`(){
 
         topicRepository.save(topic)
-        val topic = topicRepository.findByCourseName(topic.course.name, PageRequest.of(0, 5))
-
-        Assertions.assertThat(topic).isNotNull
-        Assertions.assertThat(topic.first()).isExactlyInstanceOf(Topic::class.java)
+        val topic = topicRepository.findByCourseName(nameCourse = "Kotlin", pagination = pagination)
+        Assertions.assertThat(topic.totalElements).isEqualTo(1)
     }
-
 }
